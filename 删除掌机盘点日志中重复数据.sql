@@ -1,19 +1,9 @@
-use barcode_qas
-
-create table new_material_history_item_log
-as
-select * from  material_history_item_log A
-where createDate=(select max(createDate) from v_material_history_item_log B where A.werks=B.werks and A.lgort=B.lgort 
-and A.lgpla=B.lgpla and A.matnr=B.matnr and A.charg=B.charg and A.sonum_ex=B.sonum_ex and A.bestq=B.bestq)
+use barcode_qas;
 
 
-select * from material_history_item_log
-
-select count(*) from material_history_check_ltem
-
-
-select count(*) from material_history_item_log 
-
+select * from material_history_item_log;
+select count(*) from material_history_check_ltem;
+select count(*) from material_history_item_log ;
 
 select * from material_history_item_log 
 where (werks,lgort,lgpla,matnr,maktx,lgtyp
@@ -26,7 +16,7 @@ from material_history_item_log
 group by werks,lgort,lgpla,matnr,maktx,lgtyp
 ,charg,sonum_ex,bestq,gesme,createDate
 having count(*)>1
-)
+);
 
 
 SET SQL_SAFE_UPDATES = 0; /*修改数据库模式*/
@@ -54,8 +44,4 @@ group by werks,lgort,lgpla,matnr,maktx,lgtyp
 having count(*)>1
 )
 ) t
-)
-
-
-delete from material_history_item_log
-where id in ('402884f26827d62b0168353de1f60e0b')
+);
