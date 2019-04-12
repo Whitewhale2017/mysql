@@ -1,6 +1,6 @@
-use barcode_qas;
+use barcode_dev;
 DELIMITER $$
-DROP TRIGGER IF EXISTS tri_new_material_history_item_log; 
+##DROP TRIGGER IF EXISTS tri_new_material_history_item_log; 
 create trigger tri_new_material_history_item_log
 after insert 
 on material_history_item_log
@@ -28,9 +28,9 @@ drop trigger tri_new_material_history_item_log;
 
 
 drop table if exists new_material_history_item_log;
-create table new_material_history_item_log;
+create table new_material_history_item_log
 as
-select * from  material_history_item_log A
+select * from  material_history_item_log A  limit 0,1
 where createDate=(select max(createDate) from v_material_history_item_log B where A.werks=B.werks and A.lgort=B.lgort 
 and A.lgpla=B.lgpla and A.matnr=B.matnr and A.charg=B.charg and A.sonum_ex=B.sonum_ex and A.bestq=B.bestq);
 
@@ -41,9 +41,11 @@ on A.userid=B.id
 where A.createDate=(select max(B.createDate) from v_material_history_item_log B where A.werks=B.werks and A.lgort=B.lgort 
 and A.lgpla=B.lgpla and A.matnr=B.matnr and A.charg=B.charg and A.sonum_ex=B.sonum_ex and A.bestq=B.bestq);
 
-select * from v_material_history_item_log;
+select * from v_material_history_item_log order by createdate desc;
 select * from material_history_item_log order by createdate desc;
 select * from new_material_history_item_log;
+
+truncate table new_material_history_item_log;
 
 insert into new_material_history_item_log(id,createdate,ausme,checked,cinsm,clabs,cspem,gesme,quantity,saved,verme,werks) 
 values ('123','2019-03-29 11:09:33','0',0,0,0,0,117,117,0,117,1001);
