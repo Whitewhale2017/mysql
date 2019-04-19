@@ -13,18 +13,27 @@ begin
    then
 	update new_material_history_item_log 
     set id=new.id,userid=new.userid,username=res,quantity=new.quantity,createdate=new.createdate,ausme=new.ausme,checked=new.checked,cinsm=new.cinsm
-    ,clabs=new.clabs,cspem=new.cspem,gesme=new.gesme,lgtyp=new.lgtyp,maktx=new.maktx,saved=new.saved,sobkz=new.sobkz,sonum=new.sonum,verme=new.verme
+    ,clabs=new.clabs,cspem=new.cspem,gesme=new.gesme,lgtyp=new.lgtyp,maktx=new.maktx,saved=new.saved,sobkz=new.sobkz,sonum=new.sonum,verme=new.verme,
+    currentdate=left(new.createdate,10),currentmonth=new.currentmonth
 	where werks=new.werks and lgort=new.lgort and lgpla=new.lgpla and matnr=new.matnr and charg=new.charg and sonum_ex=new.sonum_ex and bestq=new.bestq;
   else
 	insert into new_material_history_item_log(id,userid,createdate,ausme,bestq,charg,checked,cinsm,clabs,cspem,gesme,lgort,lgpla,lgtyp,maktx,matnr
-	,quantity,saved,sobkz,sonum,sonum_ex,verme,werks,username) 
+	,quantity,saved,sobkz,sonum,sonum_ex,verme,werks,username,currentdate,currentmonth) 
 	values (new.id,new.userid,new.createdate,new.ausme,new.bestq,new.charg,new.checked,new.cinsm,new.clabs,new.cspem,new.gesme,new.lgort,new.lgpla,new.lgtyp,new.maktx,new.matnr
-	,new.quantity,new.saved,new.sobkz,new.sonum,new.sonum_ex,new.verme,new.werks,res);
+	,new.quantity,new.saved,new.sobkz,new.sonum,new.sonum_ex,new.verme,new.werks,res,left(new.createdate,10),new.currentmonth);
 end if;
 end;$$
 DELIMITER ;
 
 drop trigger tri_new_material_history_item_log;
+
+select * from v_material_history_item_log order by createdate desc;
+select * from material_history_item_log order by createdate desc;
+select * from new_material_history_item_log  order by createdate desc;
+
+SET SQL_SAFE_UPDATES = 0; /*修改数据库模式*/
+SET SQL_SAFE_UPDATES = 1; /*修改数据库模式，安全模式下无法delete或者update非查询的数据*/
+update new_material_history_item_log set currentdate=left(createdate,10) where id='402884f26a2fb7ba016a33030cea3c65'
 
 
 drop table if exists new_material_history_item_log;
@@ -41,9 +50,6 @@ on A.userid=B.id
 where A.createDate=(select max(B.createDate) from v_material_history_item_log B where A.werks=B.werks and A.lgort=B.lgort 
 and A.lgpla=B.lgpla and A.matnr=B.matnr and A.charg=B.charg and A.sonum_ex=B.sonum_ex and A.bestq=B.bestq);
 
-select * from v_material_history_item_log order by createdate desc;
-select * from material_history_item_log order by createdate desc;
-select * from new_material_history_item_log;
 
 truncate table new_material_history_item_log;
 
