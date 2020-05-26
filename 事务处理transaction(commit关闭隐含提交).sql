@@ -1,6 +1,10 @@
 SET SQL_SAFE_UPDATES = 0; /*修改数据库模式*/
 SET SQL_SAFE_UPDATES = 1; /*修改数据库模式，安全模式下无法delete或者update非查询的数据*/
 
+#直接用 SET 来改变 MySQL 的自动提交模式:
+SET AUTOCOMMIT = 0 #禁止自动提交
+SET AUTOCOMMIT = 1 #开启自动提交
+
 # 一般的MySQL语句都是直接针对数据库表执行和编写的。
 # 这就是所谓的隐含提交（implicit commit），即提交（写或保存）操作是自动进行的。
  # 开启事务(start transaction)之后，隐含提交（implicit commit）就会关闭。
